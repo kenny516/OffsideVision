@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OffsideVision", "OffsideVision\OffsideVision.csproj", "{4EB680D9-3904-4956-B122-1E5646B38328}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4EB680D9-3904-4956-B122-1E5646B38328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EB680D9-3904-4956-B122-1E5646B38328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EB680D9-3904-4956-B122-1E5646B38328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EB680D9-3904-4956-B122-1E5646B38328}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
