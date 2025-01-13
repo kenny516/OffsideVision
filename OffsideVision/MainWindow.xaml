@@ -6,48 +6,48 @@
         xmlns:local="clr-namespace:OffsideVision"
         mc:Ignorable="d"
         Title="Offside Vision"
-        Height="600"
-        Width="900"
+        Height="700"
+        Width="1000"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
 
     <Window.Resources>
-        <!-- Style moderne pour les boutons -->
+        <!-- Style pour le bouton moderne -->
         <Style x:Key="ModernButton" TargetType="Button">
-            <Setter Property="Background" Value="#4361EE" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="Height" Value="54" />
-            <Setter Property="Width" Value="280" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Background" Value="#4361EE"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Height" Value="54"/>
+            <Setter Property="Width" Value="280"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
+                        <Border x:Name="border" 
                                 Background="{TemplateBinding Background}"
                                 CornerRadius="12"
                                 Padding="20,12">
                             <Border.Effect>
-                                <DropShadowEffect ShadowDepth="2"
-                                                  BlurRadius="8"
-                                                  Opacity="0.2" />
+                                <DropShadowEffect ShadowDepth="2" 
+                                                BlurRadius="8" 
+                                                Opacity="0.2"/>
                             </Border.Effect>
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#3250E0" />
+                                <Setter TargetName="border" Property="Background" Value="#3250E0"/>
                                 <Setter Property="RenderTransform">
                                     <Setter.Value>
-                                        <ScaleTransform ScaleX="1.02" ScaleY="1.02" />
+                                        <ScaleTransform ScaleX="1.02" ScaleY="1.02"/>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#2941C9" />
+                                <Setter TargetName="border" Property="Background" Value="#2941C9"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -55,25 +55,54 @@
             </Setter>
         </Style>
 
-        <!-- Style moderne pour la TextBox -->
+        <!-- Style pour la TextBox moderne -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
-            <Setter Property="Background" Value="#F8F9FA" />
-            <Setter Property="Foreground" Value="#495057" />
-            <Setter Property="Height" Value="54" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Padding" Value="15" />
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="Height" Value="54"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Width" Value="280"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
-                        <Border x:Name="border"
+                        <Border x:Name="border" 
                                 Background="{TemplateBinding Background}"
                                 CornerRadius="12"
                                 BorderThickness="1"
                                 BorderBrush="#E9ECEF">
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                          Margin="2"
-                                          VerticalAlignment="Center" />
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Margin="2"
+                                        VerticalAlignment="Center"/>
                         </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style pour le bouton de fermeture -->
+        <Style x:Key="CloseButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="20">
+                            <TextBlock Text="✕" 
+                                     FontSize="16"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FFE1E1"/>
+                                <Setter Property="Foreground" Value="#FF4444"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -85,8 +114,8 @@
             Margin="10">
         <Border.Effect>
             <DropShadowEffect BlurRadius="15"
-                              ShadowDepth="0"
-                              Opacity="0.1" />
+                             ShadowDepth="0"
+                             Opacity="0.1"/>
         </Border.Effect>
 
         <Grid>
@@ -97,66 +126,61 @@
                     MouseLeftButtonDown="Border_MouseLeftButtonDown">
                 <Grid>
                     <TextBlock Text="Offside Vision"
-                               Margin="15,0,0,0"
-                               VerticalAlignment="Center"
-                               FontWeight="SemiBold"
-                               Foreground="#495057" />
-                    <Button Content="✕"
+                             Margin="15,0,0,0"
+                             VerticalAlignment="Center"
+                             FontWeight="SemiBold"
+                             Foreground="#495057"/>
+                    <Button Style="{StaticResource CloseButtonStyle}"
                             HorizontalAlignment="Right"
-                            Width="40"
-                            Height="40"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="#495057"
-                            Click="CloseButton_Click" />
+                            Click="CloseButton_Click"/>
                 </Grid>
             </Border>
 
             <!-- Contenu principal -->
             <StackPanel VerticalAlignment="Center"
-                        Margin="40">
+                       Margin="40">
                 <!-- Logo ou Icône -->
                 <Ellipse Width="80"
                          Height="80"
                          Margin="0,0,0,30">
                     <Ellipse.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#4361EE" Offset="0" />
-                            <GradientStop Color="#3250E0" Offset="1" />
+                            <GradientStop Color="#4361EE" Offset="0"/>
+                            <GradientStop Color="#3250E0" Offset="1"/>
                         </LinearGradientBrush>
                     </Ellipse.Fill>
                 </Ellipse>
 
                 <!-- Titre -->
                 <TextBlock Text="Analyse de Hors-jeu"
-                           FontSize="32"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,40"
-                           Foreground="#212529" />
+                          FontSize="32"
+                          FontWeight="Bold"
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,40"
+                          Foreground="#212529"/>
 
                 <!-- Description -->
                 <TextBlock Text="Sélectionnez une image pour commencer l'analyse"
-                           FontSize="16"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,30"
-                           Foreground="#6C757D" />
+                          FontSize="16"
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,30"
+                          Foreground="#6C757D"/>
 
                 <!-- Boutons et TextBox -->
                 <Button Content="Sélectionner une Image"
                         Style="{StaticResource ModernButton}"
                         Margin="0,0,0,20"
-                        Click="UploadButton_Click" />
+                        Click="UploadButton_Click"/>
 
                 <TextBox Style="{StaticResource ModernTextBox}"
                          x:Name="FilePathTextBox"
                          IsReadOnly="True"
                          Text="Aucun fichier sélectionné..."
-                         Margin="0,0,0,20" />
+                         Margin="0,0,0,20"/>
 
                 <Button Content="Analyser l'Image"
                         Style="{StaticResource ModernButton}"
-                        Click="ProcessButton_Click" />
+                        Click="ProcessButton_Click"/>
             </StackPanel>
         </Grid>
     </Border>

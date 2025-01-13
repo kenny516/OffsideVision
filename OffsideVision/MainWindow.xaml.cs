@@ -22,6 +22,17 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
+    // setup for the design window
+    private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.LeftButton == MouseButtonState.Pressed)
+            DragMove();
+    }
+    private void CloseButton_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
+    //
     public void UploadButton_Click(Object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -43,17 +54,10 @@ public partial class MainWindow : Window
         }
         else
         {
+            BitmapImage bitmap = new BitmapImage(new Uri(filePath));
+            ResultWindow resultWindow = new ResultWindow(bitmap);
+            resultWindow.Show();
             MessageBox.Show("Processing image...", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-    }
-    private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.LeftButton == MouseButtonState.Pressed)
-            DragMove();
-    }
-
-    private void CloseButton_Click(object sender, RoutedEventArgs e)
-    {
-        Close();
     }
 }
