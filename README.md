@@ -5,8 +5,7 @@
 ### Détection automatique de hors-jeu pour le football moderne
 
 [![Made with .NET](https://img.shields.io/badge/Made%20with-.NET-512BD4?style=flat-square&logo=.net)](https://dotnet.microsoft.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 </div>
 
 ## 🎯 Vue d'ensemble
