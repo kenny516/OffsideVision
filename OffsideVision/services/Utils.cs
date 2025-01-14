@@ -49,11 +49,13 @@ public class Utils
                 distanceX = newDistanceX;
                 distanceY = newDistanceY;
                 circleClosestBall = circles[i];
-            }else if (newDistanceX == distanceX && newDistanceY < distanceY)
+            }
+            else if (newDistanceX == distanceX && newDistanceY < distanceY)
             {
                 distanceY = newDistanceY;
                 circleClosestBall = circles[i];
-            }else if (newDistanceX < distanceX && newDistanceY == distanceY)
+            }
+            else if (newDistanceX < distanceX && newDistanceY == distanceY)
             {
                 distanceX = newDistanceX;
                 circleClosestBall = circles[i];
@@ -131,5 +133,26 @@ public class Utils
     {
         var Defenseurs = DetectCircleClosestBall(circles, goalKeeper);
         return Defenseurs;
+    }
+
+    // Offside function 
+    // sens = -1 for up
+    // sens = 1 for down
+    public static List<Circle> GetOffsideCircles(List<Circle> circles, Circle lastDefenseur, int sens)
+    {
+        List<Circle> offsidePlayer = new List<Circle>();
+        for (int i = 0; i < circles.Count; i++)
+        {
+            if (lastDefenseur.Y - lastDefenseur.Radius > circles[i].Y - circles[i].Radius && sens > 0)
+            {
+                offsidePlayer.Add(circles[i]);
+            }
+            else if (lastDefenseur.Y + lastDefenseur.Radius < circles[i].Y + circles[i].Radius && sens < 0)
+            {
+                offsidePlayer.Add(circles[i]);
+            }
+        }
+
+        return offsidePlayer;
     }
 }
