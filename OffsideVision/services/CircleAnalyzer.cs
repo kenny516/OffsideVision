@@ -34,7 +34,33 @@ public class CircleAnalyzer
         return closestCircle;
     }
 
+    public static Circle GEtClosestCircleDiff(List<Circle> circles,Circle circleRef,Circle diff) 
+    {
+        if (circles == null || circles.Count == 0)
+            throw new ArgumentException("La liste des cercles ne peut pas être vide.");
 
+        Circle closestCircle = null;
+        double minDistance = double.MaxValue;
+
+        foreach (var circle in circles)
+        {
+            if (circle == circleRef || circle == diff)
+                continue;
+
+            // Calcul de la distance euclidienne entre les centres des cercles
+            double distance = Math.Sqrt(Math.Pow(circle.X - circleRef.X, 2) +
+                                        Math.Pow(circle.Y - circleRef.Y, 2));
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestCircle = circle;
+            }
+        }
+
+        return closestCircle;
+        
+    }
     public static Circle Getball(List<Circle> circles)
     {
         return circles.FirstOrDefault(c => c.Color == "Black") ?? throw new Exception("No ball detected");
