@@ -73,12 +73,12 @@ public partial class MainWindow : Window
         }
         HandlerOffside.CheckOffside(circles);
         Circle ball = circles.FirstOrDefault(c=>c.Color == "black");
-        Circle circle = Utils.DetectCircleClosestBall(circles,ball);
+        Circle circle = CircleAnalyzer.GetectCircleClosest(circles,ball);
         Console.WriteLine("Closest team couleur" + circle.Color);
         
-        Circle goalKeeper = Utils.DetectGoalKeeper(circles, "Blue");
-        List<Circle> TeamBleu = Utils.GetSameTeam(circles, goalKeeper);
-        Circle lastDefense = Utils.GetLastDefenseur(TeamBleu, goalKeeper);
+        Circle goalKeeper = CircleAnalyzer.GetectGoalKeeper(circles, "Blue");
+        List<Circle> TeamBleu = CircleAnalyzer.GetSameTeam(circles, goalKeeper);
+        Circle lastDefense = CircleAnalyzer.GetLastDefenseur(TeamBleu, goalKeeper);
         List<Circle> circleDetected = new List<Circle>();
         Console.WriteLine("last x"+ lastDefense.X);
         Console.WriteLine("last Y"+ lastDefense.Y);
