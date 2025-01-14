@@ -98,47 +98,13 @@ public class HandlerOffside
                 Y = centerY,
                 Radius = (int)radius,
                 Color = Utils.IsCloseColor(color, Color.Red) ? "Red" :
-                    Utils.IsCloseColor(color, Color.Blue) ? "Blue" : "black"
+                    Utils.IsCloseColor(color, Color.Blue) ? "Blue" : "Black"
             };
         }
 
         return null;
     }
 
-    public static void CheckOffside(List<Circle> circles)
-    {
-        Circle ball = circles.FirstOrDefault(c => c.Color == "black");
-        if (ball == null)
-        {
-            Console.WriteLine("Pas de joueur avec le ballon trouvé !");
-            return;
-        }
-
-        // Séparer les cercles par couleur d'équipe
-        var redTeam = circles.Where(c => c.Color == "Red").ToList();
-        var blueTeam = circles.Where(c => c.Color == "Blue").ToList();
-
-        // Déterminer l'équipe en possession du ballon
-        List<Circle> attackingTeam = ball.Color == "Red" ? blueTeam : redTeam;
-        List<Circle> defendingTeam = ball.Color == "Red" ? redTeam : blueTeam;
-
-        // Calculer la ligne des défenseurs (l'avant-dernier défenseur)
-        var defendingTeamSorted = defendingTeam.OrderBy(c => c.X).ToList();
-        int lastDefenderX = defendingTeamSorted.Last().X;  // Le défenseur le plus proche de la ligne de but
-
-        // Vérifier les joueurs de l'équipe attaquante pour savoir s'ils sont hors-jeu
-        foreach (var player in attackingTeam)
-        {
-            if (player.X < lastDefenderX)
-            {
-                Console.WriteLine($"Le joueur à la position X = {player.X}, Y = {player.Y} est HORS-JEU !");
-            }
-            else
-            {
-                Console.WriteLine($"Le joueur à la position X = {player.X}, Y = {player.Y} est EN POSITION VALIDE.");
-            }
-        }
-    }
 
     public static Bitmap AnnotateImage(Bitmap image, List<Circle> circles, List<Circle> offsidePlayers)
     {
@@ -147,8 +113,8 @@ public class HandlerOffside
         {
             Pen pen = new Pen(Color.Khaki, 3);
             Font font = new Font("Arial", 25);
-            Brush brushHJ = Brushes.Azure;
-            Brush brushER = Brushes.Green;
+            Brush brushHJ = Brushes.Crimson;
+            Brush brushER = Brushes.Aqua;
 
             foreach (var circle in circles)
             {
@@ -156,16 +122,16 @@ public class HandlerOffside
                 bool isOffside = offsidePlayers.Contains(circle);
 
                 // Dessiner un cercle
-                g.DrawEllipse(pen, circle.X - circle.Radius, circle.Y - circle.Radius, circle.Radius*2,circle.Radius*2);
+                g.DrawEllipse(pen, circle.X - circle.Radius, circle.Y - circle.Radius, circle.Radius * 2,
+                    circle.Radius * 2);
 
                 // Ajouter l'étiquette (HJ ou ER)
-                string label = isOffside ? "HJ8888888" : "ER";
+                string label = isOffside ? "HJ" : "ER";
                 Brush brush = isOffside ? brushHJ : brushER;
-                g.DrawString(label, font, brush, circle.X + 5, circle.Y - 20);
+                g.DrawString(label, font, brush, circle.X + circle.Radius, circle.Y - circle.Radius);
             }
         }
 
         return annotatedImage;
     }
-    
 }
