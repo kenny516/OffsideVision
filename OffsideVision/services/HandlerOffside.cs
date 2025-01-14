@@ -145,8 +145,8 @@ public class HandlerOffside
         Bitmap annotatedImage = new Bitmap(image);
         using (Graphics g = Graphics.FromImage(annotatedImage))
         {
-            Pen pen = new Pen(Color.Red, 2);
-            Font font = new Font("Arial", 12);
+            Pen pen = new Pen(Color.Red, 3);
+            Font font = new Font("Arial", 25);
             Brush brushHJ = Brushes.Azure;
             Brush brushER = Brushes.Green;
 
@@ -156,7 +156,7 @@ public class HandlerOffside
                 bool isOffside = offsidePlayers.Contains(circle);
 
                 // Dessiner un cercle
-                g.DrawEllipse(pen, circle.X - 10, circle.Y - 10, 20, 20);
+                g.DrawEllipse(pen, circle.X - 15, circle.Y - 15, 30, 30);
 
                 // Ajouter l'étiquette (HJ ou ER)
                 string label = isOffside ? "HJ8888888" : "ER";
