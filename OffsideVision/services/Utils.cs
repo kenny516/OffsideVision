@@ -23,7 +23,7 @@ public class Utils
         }
     }
 
-    public static bool IsCloseColor(Color color1, Color color2, int tolerance = 70)
+    public static bool IsCloseColor(Color color1, Color color2, int tolerance = 100)
     {
         return Math.Abs(color1.R - color2.R) < tolerance &&
                Math.Abs(color1.G - color2.G) < tolerance &&

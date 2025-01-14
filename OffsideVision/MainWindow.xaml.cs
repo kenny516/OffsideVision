@@ -60,7 +60,7 @@ public partial class MainWindow : Window
 
         BitmapImage bitmap = new BitmapImage(new Uri(filePath));
         Bitmap image = Utils.ConvertBitmapImageToBitmap(bitmap);
-        List<Circle> circles = HandlerOffside.CircleDetect(image, 5, 30);
+        List<Circle> circles = HandlerOffside.CircleDetect(image, 5, 100);
 
         Console.WriteLine("Nombre de cercle " + circles.Count);
 

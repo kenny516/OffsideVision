@@ -87,7 +87,7 @@ public class HandlerOffside
         int centerY = (minY + maxY) / 2;
 
         // Calculer le rayon approximatif
-        double radius = cluster.Average(p => Math.Sqrt(Math.Pow(p.X - centerX, 2) + Math.Pow(p.Y - centerY, 2)));
+        double radius = cluster.Max(p => Math.Sqrt(Math.Pow(p.X - centerX, 2) + Math.Pow(p.Y - centerY, 2)));
 
         // Vérifier si le rayon est dans les limites spécifiées
         if (radius >= minRadius && radius <= maxRadius)
@@ -145,7 +145,7 @@ public class HandlerOffside
         Bitmap annotatedImage = new Bitmap(image);
         using (Graphics g = Graphics.FromImage(annotatedImage))
         {
-            Pen pen = new Pen(Color.Red, 3);
+            Pen pen = new Pen(Color.Khaki, 3);
             Font font = new Font("Arial", 25);
             Brush brushHJ = Brushes.Azure;
             Brush brushER = Brushes.Green;
@@ -156,7 +156,7 @@ public class HandlerOffside
                 bool isOffside = offsidePlayers.Contains(circle);
 
                 // Dessiner un cercle
-                g.DrawEllipse(pen, circle.X - 15, circle.Y - 15, 30, 30);
+                g.DrawEllipse(pen, circle.X - circle.Radius, circle.Y - circle.Radius, circle.Radius*2,circle.Radius*2);
 
                 // Ajouter l'étiquette (HJ ou ER)
                 string label = isOffside ? "HJ8888888" : "ER";
