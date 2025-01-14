@@ -1,4 +1,5 @@
 ﻿using System.Windows.Documents;
+using Microsoft.Win32;
 using OffsideVision.model;
 
 namespace OffsideVision.services;
@@ -6,40 +7,33 @@ namespace OffsideVision.services;
 public class CircleAnalyzer
 {
     // function for getting the closest circle to the reference circle
-    public static Circle GetectCircleClosest(List<Circle> circles, Circle circleRef)
+    public static Circle GetClosestCircle(List<Circle> circles, Circle circleRef)
     {
-        Circle circleClosestBall = null;
-        int distanceX = int.MaxValue;
-        int distanceY = int.MaxValue;
-        for (int i = 0; i < circles.Count; i++)
-        {
-            if (circles[i] == circleRef)
-            {
-                continue;
-            }
+        if (circles == null || circles.Count == 0)
+            throw new ArgumentException("La liste des cercles ne peut pas être vide.");
 
-            int newDistanceX = Math.Abs(circleRef.X - circles[i].X);
-            int newDistanceY = Math.Abs(circleRef.Y - circles[i].Y);
-            if (newDistanceX < distanceX && newDistanceY < distanceY)
+        Circle closestCircle = null;
+        double minDistance = double.MaxValue;
+
+        foreach (var circle in circles)
+        {
+            if (circle == circleRef)
+                continue;
+
+            // Calcul de la distance euclidienne entre les centres des cercles
+            double distance = Math.Sqrt(Math.Pow(circle.X - circleRef.X, 2) +
+                                        Math.Pow(circle.Y - circleRef.Y, 2));
+
+            if (distance < minDistance)
             {
-                distanceX = newDistanceX;
-                distanceY = newDistanceY;
-                circleClosestBall = circles[i];
-            }
-            else if (newDistanceX == distanceX && newDistanceY < distanceY)
-            {
-                distanceY = newDistanceY;
-                circleClosestBall = circles[i];
-            }
-            else if (newDistanceX < distanceX && newDistanceY == distanceY)
-            {
-                distanceX = newDistanceX;
-                circleClosestBall = circles[i];
+                minDistance = distance;
+                closestCircle = circle;
             }
         }
 
-        return circleClosestBall;
+        return closestCircle;
     }
+
 
     public static Circle Getball(List<Circle> circles)
     {
@@ -85,7 +79,7 @@ public class CircleAnalyzer
     public static Circle GetCarrier(List<Circle> circles)
     {
         var ball = Getball(circles);
-        var carrier = GetectCircleClosest(circles, ball);
+        var carrier = GetClosestCircle(circles, ball);
         return carrier;
     }
 
@@ -177,7 +171,7 @@ public class CircleAnalyzer
         
         
         var opTeam = GetOpposingTeam(circles,carrier);
-        var opGoalKeeper = GetectGoalKeeper(circles,opTeam[0].Color);;
+        var opGoalKeeper = GetectGoalKeeper(circles,opTeam.First().Color);;
         var oplastDefenseur = GetLastDefenseur(circles,opGoalKeeper);
         var sens = GetSensAttaque(circles);
         

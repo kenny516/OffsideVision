@@ -5,6 +5,14 @@ namespace OffsideVision.services;
 
 public class HandlerOffside
 {
+    
+    // static Color Team1Color = Color.FromArgb(250, 105, 105);
+    // static Color Team2Color = Color.FromArgb(86, 162, 232);
+    // static Color ballColor = Color.FromArgb(18, 18, 18);
+    static Color Team1Color = Color.Red;
+    static Color Team2Color = Color.Blue;
+    static Color ballColor = Color.Black;
+    
     public static List<Circle> CircleDetect(Bitmap image, int minRadius, int maxRadius)
     {
         List<Circle> circles = new List<Circle>();
@@ -19,9 +27,9 @@ public class HandlerOffside
                 Color pixelColor = image.GetPixel(x, y);
 
                 // Vérification pour rouge, bleu ou noir
-                if (Utils.IsCloseColor(pixelColor, Color.Red) ||
-                    Utils.IsCloseColor(pixelColor, Color.Blue) ||
-                    Utils.IsCloseColor(pixelColor, Color.Black))
+                if (Utils.IsCloseColor(pixelColor, Team1Color) ||
+                    Utils.IsCloseColor(pixelColor, Team2Color) ||
+                    Utils.IsCloseColor(pixelColor, ballColor))
                 {
                     // Trouver un cluster de pixels similaires
                     var cluster = FloodFill(image, x, y, pixelColor, visited);
@@ -97,8 +105,8 @@ public class HandlerOffside
                 X = centerX,
                 Y = centerY,
                 Radius = (int)radius,
-                Color = Utils.IsCloseColor(color, Color.Red) ? "Red" :
-                    Utils.IsCloseColor(color, Color.Blue) ? "Blue" : "Black"
+                Color = Utils.IsCloseColor(color, Team1Color) ? "Red" :
+                    Utils.IsCloseColor(color, Team2Color) ? "Blue" : "Black"
             };
         }
 
