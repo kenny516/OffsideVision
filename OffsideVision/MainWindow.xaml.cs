@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Drawing;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,6 +10,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using OffsideVision.model;
+using OffsideVision.services;
 
 namespace OffsideVision;
 
@@ -28,10 +31,12 @@ public partial class MainWindow : Window
         if (e.LeftButton == MouseButtonState.Pressed)
             DragMove();
     }
+
     private void CloseButton_Click(object sender, RoutedEventArgs e)
     {
         Close();
     }
+
     //
     public void UploadButton_Click(Object sender, RoutedEventArgs e)
     {
@@ -52,12 +57,19 @@ public partial class MainWindow : Window
                 MessageBoxImage.Error);
             return;
         }
-        else
-        {
-            BitmapImage bitmap = new BitmapImage(new Uri(filePath));
-            ResultWindow resultWindow = new ResultWindow(bitmap);
-            resultWindow.Show();
-            MessageBox.Show("Processing image...", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+
+        BitmapImage bitmap = new BitmapImage(new Uri(filePath));
+        Bitmap image = Utils.ConvertBitmapImageToBitmap(bitmap);
+        List<Circle> circles = HandlerOffside.CircleDetect(image, 5, 50);
+
+        Console.WriteLine("Nombre de cercle " + circles.Count);
+
+        List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(circles);
+        
+        image = HandlerOffside.AnnotateImage(image, circles, AttackerOffside);
+            
+        ResultWindow resultWindow = new ResultWindow(image);
+        resultWindow.Show();
+        MessageBox.Show("Processing image...", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }
