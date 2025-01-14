@@ -147,7 +147,7 @@ public class HandlerOffside
         {
             Pen pen = new Pen(Color.Red, 2);
             Font font = new Font("Arial", 12);
-            Brush brushHJ = Brushes.Red;
+            Brush brushHJ = Brushes.Azure;
             Brush brushER = Brushes.Green;
 
             foreach (var circle in circles)
@@ -159,7 +159,7 @@ public class HandlerOffside
                 g.DrawEllipse(pen, circle.X - 10, circle.Y - 10, 20, 20);
 
                 // Ajouter l'étiquette (HJ ou ER)
-                string label = isOffside ? "HJ" : "ER";
+                string label = isOffside ? "HJ8888888" : "ER";
                 Brush brush = isOffside ? brushHJ : brushER;
                 g.DrawString(label, font, brush, circle.X + 5, circle.Y - 20);
             }
