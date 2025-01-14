@@ -3,17 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:OffsideVision"
         mc:Ignorable="d"
         Title="Résultat de l'Analyse"
-        Height="700"
-        Width="1000"
+        Height="800"
+        Width="1200"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
 
     <Window.Resources>
-        <!-- Style pour le bouton de fermeture -->
         <Style x:Key="CloseButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#495057"/>
@@ -75,13 +73,12 @@
             </Border>
 
             <!-- Conteneur principal -->
-            <Border Margin="20,60,20,20"
+            <Border Margin="10,60,10,10"
                     Background="#F8F9FA"
                     CornerRadius="15">
                 <Grid>
                     <!-- Zone de l'image -->
-                    <Border Margin="15"
-                            Background="White"
+                    <Border Background="White"
                             CornerRadius="10"
                             BorderThickness="1"
                             BorderBrush="#E9ECEF">
@@ -93,8 +90,7 @@
 
                         <Image x:Name="ResultImage"
                                Stretch="Uniform"
-                               RenderOptions.BitmapScalingMode="HighQuality"
-                               Margin="10" />
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
                     </Border>
 
                     <!-- Indicateur de chargement (optionnel) -->

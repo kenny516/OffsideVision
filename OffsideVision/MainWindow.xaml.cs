@@ -60,30 +60,13 @@ public partial class MainWindow : Window
 
         BitmapImage bitmap = new BitmapImage(new Uri(filePath));
         Bitmap image = Utils.ConvertBitmapImageToBitmap(bitmap);
-        List<Circle> circles = HandlerOffside.CircleDetect(image, 5, 30);
+        List<Circle> circles = HandlerOffside.CircleDetect(image, 5, 50);
 
         Console.WriteLine("Nombre de cercle " + circles.Count);
 
-        for (int i = 0; i < circles.Count; i++)
-        {
-            Console.WriteLine("X" + circles[i].X);
-            Console.WriteLine("Y" + circles[i].Y);
-            Console.WriteLine("Color" + circles[i].Color);
-            Console.WriteLine("radius" + circles[i].Radius);
-        }
-        HandlerOffside.CheckOffside(circles);
-        Circle ball = circles.FirstOrDefault(c=>c.Color == "black");
-        Circle circle = Utils.DetectCircleClosestBall(circles,ball);
-        Console.WriteLine("Closest team couleur" + circle.Color);
+        List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(circles);
         
-        Circle goalKeeper = Utils.DetectGoalKeeper(circles, "Blue");
-        List<Circle> TeamBleu = Utils.GetSameTeam(circles, goalKeeper);
-        Circle lastDefense = Utils.GetLastDefenseur(TeamBleu, goalKeeper);
-        List<Circle> circleDetected = new List<Circle>();
-        Console.WriteLine("last x"+ lastDefense.X);
-        Console.WriteLine("last Y"+ lastDefense.Y);
-        circleDetected.Add(lastDefense);
-        image = HandlerOffside.AnnotateImage(image, circles, circleDetected);
+        image = HandlerOffside.AnnotateImage(image, circles, AttackerOffside);
             
         ResultWindow resultWindow = new ResultWindow(image);
         resultWindow.Show();
