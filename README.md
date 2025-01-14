@@ -1,6 +1,6 @@
 <div align="center">
 
-# Offside
+# OffsideVision
 
 ### Détection automatique de hors-jeu pour le football moderne
 
@@ -11,7 +11,7 @@
 
 ## 🎯 Vue d'ensemble
 
-**Offside** est une solution innovante développée en WPF (.NET) qui révolutionne l'analyse des positions de hors-jeu dans le football. En utilisant des algorithmes avancés de traitement d'image, l'application analyse automatiquement les situations de jeu et identifie avec précision les positions des joueurs.
+**OffsideVision** est une solution innovante développée en WPF (.NET) qui révolutionne l'analyse des positions de hors-jeu dans le football. En utilisant des algorithmes avancés de traitement d'image, l'application analyse automatiquement les situations de jeu et identifie avec précision les positions des joueurs.
 
 ## ✨ Caractéristiques principales
 
@@ -54,7 +54,7 @@ dotnet restore
 
 ### Utilisation
 
-1. **Lancement** : Démarrez l'application Offside
+1. **Lancement** : Démarrez l'application OffsideVision
 2. **Import** : Sélectionnez une image JPEG d'une situation de jeu
 3. **Analyse** : L'application détecte automatiquement les positions
 4. **Export** : Téléchargez l'image annotée
