@@ -74,7 +74,6 @@ public partial class MainWindow : Window
         List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(circles);
         
         image = HandlerOffside.AnnotateImage(image, circles, AttackerOffside);
-        HandlerOffside.DrawLine(image, 50);
         ResultWindow resultWindow = new ResultWindow(bitmap,image);
         resultWindow.Show();
     }

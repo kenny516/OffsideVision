@@ -1,170 +1,109 @@
 ﻿using System.Drawing;
 using OffsideVision.model;
+using OpenCvSharp;
+using Point = OpenCvSharp.Point;  // Utiliser OpenCvSharp.Point au lieu de System.Drawing.Point
 
-namespace OffsideVision.services;
-
-public class HandlerOffside
+namespace OffsideVision.services
 {
-    // static Color Team1Color = Color.FromArgb(250, 105, 105);
-    // static Color Team2Color = Color.FromArgb(86, 162, 232);
-    // static Color ballColor = Color.FromArgb(18, 18, 18);
-    static Color Team1Color = Color.Red;
-    static Color Team2Color = Color.FromArgb(25, 118, 210);
-    static Color ballColor = Color.Black;
-
-    public static List<Circle> CircleDetect(Bitmap image, int minRadius, int maxRadius)
+    public class HandlerOffside
     {
-        List<Circle> circles = new List<Circle>();
-        bool[,] visited = new bool[image.Width, image.Height]; // Marquer les pixels déjà traités
-
-        for (int x = 0; x < image.Width; x++)
+        // Détection des cercles pour une couleur donnée
+        private static List<Circle> DetectCerclesByColor(Bitmap image, Scalar lowerBound, Scalar upperBound, Color color)
         {
-            for (int y = 0; y < image.Height; y++)
+            List<Circle> Cercles = new List<Circle>();
+
+            // Convertir Bitmap en Mat (OpenCvSharp)
+            Mat matImage = OpenCvSharp.Extensions.BitmapConverter.ToMat(image);
+
+            // Convertir l'image en HSV (Teinte, Saturation, Valeur)
+            Mat hsvImage = new Mat();
+            Cv2.CvtColor(matImage, hsvImage, ColorConversionCodes.BGR2HSV);
+
+            // Filtrer l'image HSV pour n'obtenir que la couleur souhaitée
+            Mat mask = new Mat();
+            Cv2.InRange(hsvImage, lowerBound, upperBound, mask);
+
+            // Trouver les contours dans le masque
+            OpenCvSharp.Point[][] contours; // Utiliser OpenCvSharp.Point[][] au lieu de System.Drawing.Point[][]
+            HierarchyIndex[] hierarchy;
+            Cv2.FindContours(mask, out contours, out hierarchy, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+
+            // Parcourir les contours pour déterminer les positions des cercles
+            foreach (var contour in contours)
             {
-                if (visited[x, y]) continue; // Passer si déjà traité
+                // Calculer le cercle englobant pour chaque contour
+                Point2f center;
+                float radius;
+                Cv2.MinEnclosingCircle(contour, out center, out radius);
 
-                Color pixelColor = image.GetPixel(x, y);
-
-                // Convertir la couleur en HSV
-                (double hue, double saturation, double brightness) = Utils.ToHsv(pixelColor);
-
-                // Vérification pour rouge, bleu ou noir
-                if (Utils.IsColorInRange(hue, saturation, brightness, "Red") ||
-                    Utils.IsColorInRange(hue, saturation, brightness, "Blue") ||
-                    Utils.IsColorInRange(hue, saturation, brightness, "Black"))
+                if (radius > 1) // Ignorer les petits bruits
                 {
-                    // Trouver un cluster de pixels similaires
-                    var cluster = FloodFill(image, x, y, pixelColor, visited);
+                    Cercles.Add(new Circle((int)center.X, (int)center.Y, (int)radius, color.Name));
+                }
+            }
 
-                    // Vérifier si le cluster forme un cercle avec un rayon valide
-                    Circle? circle = GetCircleFromCluster(cluster, minRadius, maxRadius, pixelColor);
+            return Cercles;
+        }
 
-                    if (circle != null)
+        // Détection des cercles pour toutes les couleurs possibles (bleu, rouge, noir)
+        public static List<Circle> CircleDetect(Bitmap image, int minRadius, int maxRadius)
+        {
+            // Définir les plages de couleurs HSV pour les joueurs en bleu et en rouge
+            Scalar blueLower = new Scalar(100, 150, 0); 
+            Scalar blueUpper = new Scalar(140, 255, 255);
+            Scalar redLower1 = new Scalar(0, 150, 0);
+            Scalar redUpper1 = new Scalar(10, 255, 255);
+            Scalar redLower2 = new Scalar(170, 150, 0);
+            Scalar redUpper2 = new Scalar(180, 255, 255);
+            Scalar blackLower = new Scalar(0, 0, 0);
+            Scalar blackUpper = new Scalar(180, 255, 50);
+
+            // Détecter les cercles de chaque couleur
+            List<Circle> blueCercles = DetectCerclesByColor(image, blueLower, blueUpper, Color.Blue);
+            List<Circle> redCercles = DetectCerclesByColor(image, redLower1, redUpper1, Color.Red);
+            List<Circle> blackCercles = DetectCerclesByColor(image, blackLower, blackUpper, Color.Black);
+
+            // Ajouter les cercles détectés
+            redCercles.AddRange(DetectCerclesByColor(image, redLower2, redUpper2, Color.Red));
+            List<Circle> Cercles = new List<Circle>();
+            Cercles.AddRange(blueCercles);
+            Cercles.AddRange(redCercles);
+            Cercles.AddRange(blackCercles);
+
+            return Cercles;
+        }
+
+        // Annotation de l'image avec les cercles et l'état des joueurs (Hors-jeu ou en règle)
+        public static Bitmap AnnotateImage(Bitmap image, List<Circle> circles, List<Circle> offsidePlayers)
+        {
+            Bitmap annotatedImage = new Bitmap(image);
+
+            using (Graphics g = Graphics.FromImage(annotatedImage))
+            {
+                foreach (var circle in circles)
+                {
+                    bool isOffside = offsidePlayers.Any(p => p.X == circle.X && p.Y == circle.Y && p.Radius == circle.Radius);
+                    Color labelColor = isOffside ? Color.Red : Color.LightBlue;
+
+                    // Dessiner le cercle
+                    g.DrawEllipse(new Pen(Color.Yellow, 2),
+                        circle.X - circle.Radius,
+                        circle.Y - circle.Radius,
+                        circle.Radius * 2,
+                        circle.Radius * 2);
+
+                    // Ajouter l'étiquette "HJ" pour Hors-Jeu ou "ER" pour En-Règle
+                    string label = isOffside ? "HJ" : "ER";
+                    using (Brush brush = new SolidBrush(labelColor))
                     {
-                        circles.Add(circle);
+                        g.DrawString(label, new Font("Arial", 12, FontStyle.Bold), brush,
+                            circle.X + circle.Radius,
+                            circle.Y - circle.Radius);
                     }
                 }
             }
-        }
 
-        return circles;
-    }
-
-    private static List<Point> FloodFill(Bitmap image, int startX, int startY, Color targetColor, bool[,] visited)
-    {
-        List<Point> cluster = new List<Point>();
-        Queue<Point> queue = new Queue<Point>();
-        queue.Enqueue(new Point(startX, startY));
-
-        while (queue.Count > 0)
-        {
-            Point point = queue.Dequeue();
-
-            if (point.X < 0 || point.X >= image.Width || point.Y < 0 || point.Y >= image.Height)
-                continue;
-
-            if (visited[point.X, point.Y])
-                continue;
-
-            Color currentColor = image.GetPixel(point.X, point.Y);
-            (double hue, double saturation, double brightness) = Utils.ToHsv(currentColor);
-
-            // Vérifier si la couleur actuelle est proche de la cible
-            (double targetHue, double targetSaturation, double targetBrightness) = Utils.ToHsv(targetColor);
-            if (!Utils.IsColorInRange(hue, saturation, brightness, Utils.GetColorNameFromHsv(hue, saturation, brightness)))
-                continue;
-
-            // Ajouter au cluster
-            cluster.Add(point);
-            visited[point.X, point.Y] = true;
-
-            // Ajouter les voisins
-            queue.Enqueue(new Point(point.X + 1, point.Y));
-            queue.Enqueue(new Point(point.X - 1, point.Y));
-            queue.Enqueue(new Point(point.X, point.Y + 1));
-            queue.Enqueue(new Point(point.X, point.Y - 1));
-        }
-
-        return cluster;
-    }
-
-    private static Circle? GetCircleFromCluster(List<Point> cluster, int minRadius, int maxRadius, Color color)
-    {
-        // Calculer les limites du cluster
-        int minX = cluster.Min(p => p.X);
-        int maxX = cluster.Max(p => p.X);
-        int minY = cluster.Min(p => p.Y);
-        int maxY = cluster.Max(p => p.Y);
-
-        // Calculer le centre
-        int centerX = (minX + maxX) / 2;
-        int centerY = (minY + maxY) / 2;
-
-        // Calculer le rayon approximatif
-        double radius = cluster.Max(p => Math.Sqrt(Math.Pow(p.X - centerX, 2) + Math.Pow(p.Y - centerY, 2)));
-
-        // Vérifier si le rayon est dans les limites spécifiées
-        if (radius >= minRadius && radius <= maxRadius)
-        {
-            return new Circle
-            {
-                X = centerX,
-                Y = centerY,
-                Radius = (int)radius,
-                Color = Utils.GetColorNameFromHsv(Utils.ToHsv(color).hue,Utils.ToHsv(color).saturation,Utils.ToHsv(color).brightness)
-            };
-        }
-
-        return null;
-    }
-
-
-    public static Bitmap AnnotateImage(Bitmap image, List<Circle> circles, List<Circle> offsidePlayers)
-    {
-        Bitmap annotatedImage = new Bitmap(image);
-        using (Graphics g = Graphics.FromImage(annotatedImage))
-        {
-            Pen pen = new Pen(Color.Khaki, 3);
-            Font font = new Font("Arial", 15);
-            Brush brushHJ = Brushes.Crimson;
-            Brush brushER = Brushes.Aqua;
-
-            foreach (var circle in circles)
-            {
-                // Vérifier si le joueur est hors-jeu
-                bool isOffside = offsidePlayers.Contains(circle);
-
-                // Dessiner un cercle
-                g.DrawEllipse(pen, circle.X - circle.Radius, circle.Y - circle.Radius, circle.Radius * 2,
-                    circle.Radius * 2);
-
-                // Ajouter l'étiquette (HJ ou ER)
-                string label = isOffside ? "HJ" : "ER";
-                Brush brush = isOffside ? brushHJ : brushER;
-                g.DrawString(label, font, brush, circle.X + circle.Radius, circle.Y - circle.Radius);
-            }
-        }
-
-        return annotatedImage;
-    }
-
-    public static void DrawLine(Bitmap image, int y)
-    {
-        // Vérification pour s'assurer que 'y' est dans les limites de l'image
-        if (y < 0 || y >= image.Height)
-        {
-            throw new ArgumentOutOfRangeException(nameof(y),
-                "La valeur de y doit être comprise entre 0 et la hauteur de l'image.");
-        }
-
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            // Définir une couleur et une épaisseur de pinceau
-            using (Pen pen = new Pen(Color.Red, 2)) // Ligne rouge avec une épaisseur de 2
-            {
-                // Dessiner une ligne horizontale sur l'image
-                graphics.DrawLine(pen, 0, y, image.Width - 1, y);
-            }
+            return annotatedImage;
         }
     }
 }

@@ -42,41 +42,46 @@ public class Utils
     {
         return colorName switch
         {
-            // Rouge : marge élargie pour les variations de teinte, saturation et luminosité
-            "Red" => (saturation > 0.5 && brightness > 0.2 && 
-                      ((hue >= 0 && hue <= 15) || (hue >= 345 && hue <= 360))),
+            // Rouge : De rouge clair à foncé avec différentes saturations et luminosité
+            "Red" => (saturation > 0.3 && brightness > 0.1 && 
+                      ((hue >= 0 && hue <= 15) || (hue >= 15 && hue <= 30) || (hue >= 330 && hue <= 360))), // Couvrir du rouge clair au rouge foncé
 
-            // Bleu : ajustement de la plage pour inclure des nuances cyan/bleu clair
-            "Blue" => (saturation > 0.4 && brightness > 0.2 &&
-                       hue >= 190 && hue <= 260),
+            // Bleu : De bleu clair à foncé
+            "Blue" => (saturation > 0.3 && brightness > 0.2 && 
+                       ((hue >= 190 && hue <= 220) || (hue >= 220 && hue <= 260))), // Couvrir du bleu clair au bleu foncé
 
-            // Noir : luminosité très faible et saturation minimale
-            "Black" => brightness < 0.3 && saturation < 0.3,
+            // Noir : Large plage de gris foncés et noir
+            "Black" => (brightness < 0.4 && saturation < 0.3), // Inclure les gris foncés jusqu'au noir pur
 
             // Couleur inconnue ou non gérée
             _ => false
         };
     }
 
-
     public static string GetColorNameFromHsv(double hue, double saturation, double brightness)
     {
-        // Vérification pour la couleur noire (faible luminosité et faible saturation)
-        if (brightness < 0.3 && saturation < 0.3)
+        // Vérification pour la couleur noire : Luminosité faible et faible saturation (ajusté pour inclure gris foncés)
+        if (brightness < 0.4 && saturation < 0.3)
             return "Black";
 
-        // Détection du rouge (prendre en compte des variations de saturation et de luminosité)
-        if (saturation > 0.5 && brightness > 0.2 && 
-            ((hue >= 0 && hue <= 15) || (hue >= 345 && hue <= 360)))
+        // Détection du rouge : du rouge clair au rouge foncé, selon la saturation et la luminosité
+        if (saturation > 0.3 && brightness > 0.1 && 
+            ((hue >= 0 && hue <= 15) || (hue >= 15 && hue <= 30) || (hue >= 330 && hue <= 360))) // Plage de rouge clair à foncé
             return "Red";
 
-        // Détection du bleu (prendre en compte des variations de saturation et de luminosité)
-        if (saturation > 0.4 && brightness > 0.2 &&
-            hue >= 190 && hue <= 260)
+        // Détection du bleu : du bleu clair au bleu foncé, selon la saturation et la luminosité
+        if (saturation > 0.3 && brightness > 0.2 && 
+            ((hue >= 190 && hue <= 220) || (hue >= 220 && hue <= 260))) // Plage de bleu clair à foncé
             return "Blue";
 
         // Couleur inconnue
         return "Unknown";
     }
+
+
+
+
+
+
 
 }

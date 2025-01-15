@@ -47,13 +47,33 @@
               "target": "Package",
               "version": "[4.10.0.5680, )"
             },
+            "Emgu.CV.Bitmap": {
+              "target": "Package",
+              "version": "[4.10.0.5680, )"
+            },
+            "Emgu.CV.runtime.windows": {
+              "target": "Package",
+              "version": "[4.10.0.5680, )"
+            },
             "Microsoft.ML": {
               "target": "Package",
               "version": "[4.0.0, )"
             },
+            "OpenCvSharp4": {
+              "target": "Package",
+              "version": "[4.10.0.20241108, )"
+            },
+            "OpenCvSharp4.Extensions": {
+              "target": "Package",
+              "version": "[4.10.0.20241108, )"
+            },
+            "OpenCvSharp4.runtime.win": {
+              "target": "Package",
+              "version": "[4.10.0.20241108, )"
+            },
             "System.Drawing.Common": {
               "target": "Package",
-              "version": "[9.0.0, )"
+              "version": "[9.0.1, )"
             }
           },
           "imports": [
