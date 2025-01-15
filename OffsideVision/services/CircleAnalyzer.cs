@@ -44,7 +44,7 @@ public class CircleAnalyzer
 
         foreach (var circle in circles)
         {
-            if (circle == circleRef || circle == diff)
+            if (circle == circleRef || circle.Color == diff.Color)
                 continue;
 
             // Calcul de la distance euclidienne entre les centres des cercles
@@ -175,9 +175,8 @@ public class CircleAnalyzer
         return circleClosestBall;
     }
 
-    private static int GetSensAttaque(List<Circle> circles)
+    private static int GetSensAttaque(List<Circle> circles,Circle carrier)
     {
-        var carrier = GetCarrier(circles);
         var goalKeeper = GetectGoalKeeper(circles, carrier.Color);
         if (goalKeeper.Y - carrier.Y > 0)
         {
@@ -199,7 +198,7 @@ public class CircleAnalyzer
         var opTeam = GetOpposingTeam(circles,carrier);
         var opGoalKeeper = GetectGoalKeeper(circles,opTeam.First().Color);;
         var oplastDefenseur = GetLastDefenseur(circles,opGoalKeeper);
-        var sens = GetSensAttaque(circles);
+        var sens = GetSensAttaque(circles,carrier);
         
         
         var attackerPossibleOffside = GetMemberTeamBeforCarrier(circles, carrier, goalKeeper);
@@ -228,5 +227,43 @@ public class CircleAnalyzer
         Console.WriteLine("offside count : " + offsidePlayer.Count);
 
         return offsidePlayer;
+    }
+
+    public static List<Circle> GetOffsideTeam(List<Circle> circles,Circle carrier)
+    {
+        var goalKeeper = GetectGoalKeeper(circles,carrier.Color);
+        
+        
+        var opTeam = GetOpposingTeam(circles,carrier);
+        var opGoalKeeper = GetectGoalKeeper(circles,opTeam.First().Color);;
+        var oplastDefenseur = GetLastDefenseur(circles,opGoalKeeper);
+        var sens = GetSensAttaque(circles,carrier);
+        
+        
+        var attackerPossibleOffside = GetMemberTeamBeforCarrier(circles, carrier, goalKeeper);
+        
+        var offsidePlayer = new List<Circle>();
+        
+        Console.WriteLine("sense : " + sens);
+        Console.WriteLine("carrier : " + carrier.Color);
+        Console.WriteLine("Attacker count : " + attackerPossibleOffside.Count);
+        Console.WriteLine("goalKeeper color : " + opGoalKeeper.Color);
+
+        Console.WriteLine("last defenseur x "+oplastDefenseur.X+" y:"+oplastDefenseur.Y+" color"+oplastDefenseur.Color);
+        
+        foreach (var attacker in attackerPossibleOffside)
+        {
+            if (oplastDefenseur.Y - oplastDefenseur.Radius > attacker.Y - attacker.Radius && sens > 0)
+            {
+                offsidePlayer.Add(attacker);
+            }
+            else if (oplastDefenseur.Y + oplastDefenseur.Radius < attacker.Y + attacker.Radius && sens < 0)
+            {
+                offsidePlayer.Add(attacker);
+            }
+        }
+        Console.WriteLine("offside count : " + offsidePlayer.Count);
+
+        return offsidePlayer;   
     }
 }
