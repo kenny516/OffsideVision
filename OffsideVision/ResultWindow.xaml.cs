@@ -9,14 +9,14 @@ namespace OffsideVision;
 
 public partial class ResultWindow : Window
 {
-    public ResultWindow(Bitmap imageSource)
+    public ResultWindow(BitmapImage imageSource,Bitmap imageResultat)
     {
         InitializeComponent();
         var bitmapImage = new BitmapImage();
         using (var stream = new MemoryStream())
         {
             // Sauvegarder le Bitmap dans un flux mémoire
-            imageSource.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+            imageResultat.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
             stream.Seek(0, SeekOrigin.Begin);
 
             // Charger le flux dans le BitmapImage
@@ -25,6 +25,7 @@ public partial class ResultWindow : Window
             bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
             bitmapImage.EndInit();
         }
+        InitialImage.Source = imageSource;
         ResultImage.Source = bitmapImage;
     }
     private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -37,10 +38,5 @@ public partial class ResultWindow : Window
     {
         Close();
     }
-
-    // Méthode pour afficher/masquer l'indicateur de chargement
-    public void SetLoadingState(bool isLoading)
-    {
-        LoadingOverlay.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
-    }
+    
 }
