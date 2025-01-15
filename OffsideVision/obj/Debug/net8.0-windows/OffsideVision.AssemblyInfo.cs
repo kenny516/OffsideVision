@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OffsideVision")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f86ebd07556e76f95db72e6d560911545327c9ef")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec67ec32438bcfa5ce26530c8d9b73ae22baccab")]
 [assembly: System.Reflection.AssemblyProductAttribute("OffsideVision")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OffsideVision")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

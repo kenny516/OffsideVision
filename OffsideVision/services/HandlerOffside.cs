@@ -36,7 +36,7 @@ namespace OffsideVision.services
                 float radius;
                 Cv2.MinEnclosingCircle(contour, out center, out radius);
 
-                if (radius > 1) // Ignorer les petits bruits
+                if (radius > 1 && radius < 10) // Ignorer les petits bruits
                 {
                     Cercles.Add(new Circle((int)center.X, (int)center.Y, (int)radius, color.Name));
                 }
