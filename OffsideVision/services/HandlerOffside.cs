@@ -25,10 +25,13 @@ public class HandlerOffside
 
                 Color pixelColor = image.GetPixel(x, y);
 
+                // Convertir la couleur en HSV
+                (double hue, double saturation, double brightness) = Utils.ToHsv(pixelColor);
+
                 // Vérification pour rouge, bleu ou noir
-                if (Utils.IsCloseColor(pixelColor, Team1Color) ||
-                    Utils.IsCloseColor(pixelColor, Team2Color) ||
-                    Utils.IsCloseColor(pixelColor, ballColor))
+                if (Utils.IsColorInRange(hue, saturation, brightness, "Red") ||
+                    Utils.IsColorInRange(hue, saturation, brightness, "Blue") ||
+                    Utils.IsColorInRange(hue, saturation, brightness, "Black"))
                 {
                     // Trouver un cluster de pixels similaires
                     var cluster = FloodFill(image, x, y, pixelColor, visited);
@@ -64,7 +67,11 @@ public class HandlerOffside
                 continue;
 
             Color currentColor = image.GetPixel(point.X, point.Y);
-            if (!Utils.IsCloseColor(currentColor, targetColor))
+            (double hue, double saturation, double brightness) = Utils.ToHsv(currentColor);
+
+            // Vérifier si la couleur actuelle est proche de la cible
+            (double targetHue, double targetSaturation, double targetBrightness) = Utils.ToHsv(targetColor);
+            if (!Utils.IsColorInRange(hue, saturation, brightness, Utils.GetColorNameFromHsv(hue, saturation, brightness)))
                 continue;
 
             // Ajouter au cluster
@@ -104,8 +111,7 @@ public class HandlerOffside
                 X = centerX,
                 Y = centerY,
                 Radius = (int)radius,
-                Color = Utils.IsCloseColor(color, Team1Color) ? "Red" :
-                    Utils.IsCloseColor(color, Team2Color) ? "Blue" : "Black"
+                Color = Utils.GetColorNameFromHsv(Utils.ToHsv(color).hue,Utils.ToHsv(color).saturation,Utils.ToHsv(color).brightness)
             };
         }
 

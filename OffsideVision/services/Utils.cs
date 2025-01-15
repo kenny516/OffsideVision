@@ -30,4 +30,53 @@ public class Utils
                Math.Abs(color1.B - color2.B) < tolerance;
     }
 
+    public static (double hue, double saturation, double brightness) ToHsv(Color color)
+    {
+        double hue = color.GetHue();
+        double saturation = color.GetSaturation();
+        double brightness = color.GetBrightness();
+        return (hue, saturation, brightness);
+    }
+
+    public static bool IsColorInRange(double hue, double saturation, double brightness, string colorName)
+    {
+        return colorName switch
+        {
+            // Rouge : marge élargie pour les variations de teinte, saturation et luminosité
+            "Red" => (saturation > 0.5 && brightness > 0.2 && 
+                      ((hue >= 0 && hue <= 15) || (hue >= 345 && hue <= 360))),
+
+            // Bleu : ajustement de la plage pour inclure des nuances cyan/bleu clair
+            "Blue" => (saturation > 0.4 && brightness > 0.2 &&
+                       hue >= 190 && hue <= 260),
+
+            // Noir : luminosité très faible et saturation minimale
+            "Black" => brightness < 0.3 && saturation < 0.3,
+
+            // Couleur inconnue ou non gérée
+            _ => false
+        };
+    }
+
+
+    public static string GetColorNameFromHsv(double hue, double saturation, double brightness)
+    {
+        // Vérification pour la couleur noire (faible luminosité et faible saturation)
+        if (brightness < 0.3 && saturation < 0.3)
+            return "Black";
+
+        // Détection du rouge (prendre en compte des variations de saturation et de luminosité)
+        if (saturation > 0.5 && brightness > 0.2 && 
+            ((hue >= 0 && hue <= 15) || (hue >= 345 && hue <= 360)))
+            return "Red";
+
+        // Détection du bleu (prendre en compte des variations de saturation et de luminosité)
+        if (saturation > 0.4 && brightness > 0.2 &&
+            hue >= 190 && hue <= 260)
+            return "Blue";
+
+        // Couleur inconnue
+        return "Unknown";
+    }
+
 }
