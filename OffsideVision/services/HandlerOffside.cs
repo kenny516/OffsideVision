@@ -5,14 +5,13 @@ namespace OffsideVision.services;
 
 public class HandlerOffside
 {
-    
     // static Color Team1Color = Color.FromArgb(250, 105, 105);
     // static Color Team2Color = Color.FromArgb(86, 162, 232);
     // static Color ballColor = Color.FromArgb(18, 18, 18);
     static Color Team1Color = Color.Red;
     static Color Team2Color = Color.Blue;
     static Color ballColor = Color.Black;
-    
+
     public static List<Circle> CircleDetect(Bitmap image, int minRadius, int maxRadius)
     {
         List<Circle> circles = new List<Circle>();
@@ -120,7 +119,7 @@ public class HandlerOffside
         using (Graphics g = Graphics.FromImage(annotatedImage))
         {
             Pen pen = new Pen(Color.Khaki, 3);
-            Font font = new Font("Arial", 25);
+            Font font = new Font("Arial", 15);
             Brush brushHJ = Brushes.Crimson;
             Brush brushER = Brushes.Aqua;
 
@@ -141,5 +140,25 @@ public class HandlerOffside
         }
 
         return annotatedImage;
+    }
+
+    public static void DrawLine(Bitmap image, int y)
+    {
+        // Vérification pour s'assurer que 'y' est dans les limites de l'image
+        if (y < 0 || y >= image.Height)
+        {
+            throw new ArgumentOutOfRangeException(nameof(y),
+                "La valeur de y doit être comprise entre 0 et la hauteur de l'image.");
+        }
+
+        using (Graphics graphics = Graphics.FromImage(image))
+        {
+            // Définir une couleur et une épaisseur de pinceau
+            using (Pen pen = new Pen(Color.Red, 2)) // Ligne rouge avec une épaisseur de 2
+            {
+                // Dessiner une ligne horizontale sur l'image
+                graphics.DrawLine(pen, 0, y, image.Width - 1, y);
+            }
+        }
     }
 }

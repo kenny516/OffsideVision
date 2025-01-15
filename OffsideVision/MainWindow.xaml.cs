@@ -67,8 +67,8 @@ public partial class MainWindow : Window
         List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(circles);
         
         image = HandlerOffside.AnnotateImage(image, circles, AttackerOffside);
-            
-        ResultWindow resultWindow = new ResultWindow(image);
+        HandlerOffside.DrawLine(image, 50);
+        ResultWindow resultWindow = new ResultWindow(bitmap,image);
         resultWindow.Show();
         MessageBox.Show("Processing image...", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
     }

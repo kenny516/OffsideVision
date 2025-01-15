@@ -1,0 +1,76 @@
+<svg viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg">
+    <!-- Terrain de foot -->
+    <rect width="700" height="500" fill="#2E7D32"/>
+    
+    <!-- Lignes blanches -->
+    <g stroke="white" stroke-width="1" fill="none">
+        <!-- Contour du terrain -->
+        <rect x="50" y="50" width="600" height="400"/>
+        
+        <!-- Ligne médiane -->
+        <line x1="350" y1="50" x2="350" y2="450"/>
+        
+        <!-- Rond central -->
+        <circle cx="350" cy="250" r="50"/>
+        <circle cx="350" cy="250" r="3" fill="white"/>
+        
+        <!-- Surface de réparation gauche -->
+        <rect x="50" y="150" width="100" height="200"/>
+        <rect x="50" y="180" width="50" height="140"/>
+        <circle cx="150" cy="250" r="3" fill="white"/>
+        
+        <!-- Surface de réparation droite -->
+        <rect x="550" y="150" width="100" height="200"/>
+        <rect x="600" y="180" width="50" height="140"/>
+        <circle cx="550" cy="250" r="3" fill="white"/>
+        
+        <!-- Corners -->
+        <path d="M 50 50 A 10 10 0 0 1 60 60" />
+        <path d="M 650 50 A 10 10 0 0 0 640 60" />
+        <path d="M 50 450 A 10 10 0 0 0 60 440" />
+        <path d="M 650 450 A 10 10 00 440" />
+    </g>
+    
+    <!-- Équipe attaquante (cercles bleus) -->
+    <g fill="#1976D2">
+        <!-- Gardien -->
+        <circle cx="120" cy="250" r="10"/>
+        <!-- Défenseurs -->
+        <circle cx="200" cy="150" r="10"/>
+        <circle cx="200" cy="250" r="10"/>
+        <circle cx="200" cy="350" r="10"/>
+        <circle cx="180" cy="200" r="10"/>
+        <!-- Milieux -->
+        <circle cx="350" cy="150" r="10"/>
+        <circle cx="350" cy="350" r="10"/>
+        <circle cx="400" cy="250" r="10"/>
+        <!-- Attaquants -->
+        <circle cx="500" cy="200" r="10"/>
+        <circle cx="520" cy="300" r="10"/>
+        <!-- Joueur en position de hors-jeu -->
+        <circle cx="580" cy="250" r="10"/>
+    </g>
+    
+    <!-- Équipe en défense (cercles rouges) -->
+    <g fill="#D32F2F">
+        <!-- Gardien -->
+        <circle cx="620" cy="250" r="10"/>
+        <!-- Ligne défensive -->
+        <circle cx="550" cy="150" r="10"/>
+        <circle cx="550" cy="200" r="10"/>
+        <circle cx="550" cy="300" r="10"/>
+        <circle cx="550" cy="350" r="10"/>
+        <!-- Milieux défensifs -->
+        <circle cx="480" cy="180" r="10"/>
+        <circle cx="480" cy="320" r="10"/>
+        <circle cx="450" cy="250" r="10"/>
+        <!-- Milieux offensifs -->
+        <circle cx="420" cy="200" r="10"/>
+        <circle cx="420" cy="300" r="10"/>
+        <!-- Attaquant replié -->
+        <circle cx="400" cy="150" r="10"/>
+    </g>
+    
+    <!-- Ballon -->
+    <circle cx="500" cy="280" r="6" fill="black"/>
+</svg>
