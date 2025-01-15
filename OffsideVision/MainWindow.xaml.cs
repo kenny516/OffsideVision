@@ -60,16 +60,29 @@ public partial class MainWindow : Window
 
         BitmapImage bitmap = new BitmapImage(new Uri(filePath));
         Bitmap image = Utils.ConvertBitmapImageToBitmap(bitmap);
+
+
+        int centreY = (int)bitmap.Height/2;
+        Console.WriteLine("CentreY :" + centreY);
+
+        int lastDefenseurY = 0;
+
         List<Circle> circles = HandlerOffside.CircleDetect(image, 5, 50);
 
-        Console.WriteLine("Nombre de cercle " + circles.Count);
+        Console.WriteLine("Nombre de cercle :" + circles.Count);
 
-        List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(circles);
+
+        // Circle carrier = CircleAnalyzer.GetCarrier(circles);
+        // Circle ball = CircleAnalyzer.Getball(circles);
+        //Circle carrierDiff = CircleAnalyzer.GEtClosestCircleDiff(circles,ball, carrier);
+        //List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideTeam(circles,carrierDiff,centreY);
         
+        List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(ref lastDefenseurY,circles,centreY);
+        
+        
+        HandlerOffside.DrawLine(image, lastDefenseurY);
         image = HandlerOffside.AnnotateImage(image, circles, AttackerOffside);
-            
-        ResultWindow resultWindow = new ResultWindow(image);
+        ResultWindow resultWindow = new ResultWindow(bitmap,image);
         resultWindow.Show();
-        MessageBox.Show("Processing image...", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }
