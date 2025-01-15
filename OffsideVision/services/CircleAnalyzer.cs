@@ -214,7 +214,7 @@ public class CircleAnalyzer
         
         foreach (var attacker in attackerPossibleOffside)
         {
-            Console.WriteLine("last Attacker x "+attacker.X+" y:"+attacker.Y);
+            Console.WriteLine("Attacker x "+attacker.X+" y:"+attacker.Y);
             if (oplastDefenseur.Y - oplastDefenseur.Radius > attacker.Y - attacker.Radius && sens > 0)
             {
                 offsidePlayer.Add(attacker);
@@ -229,7 +229,7 @@ public class CircleAnalyzer
         return offsidePlayer;
     }
 
-    public static List<Circle> GetOffsideTeam(List<Circle> circles,Circle carrier)
+    public static List<Circle> GetOffsideTeam(List<Circle> circles,Circle carrier,int CentreY)
     {
         var goalKeeper = GetectGoalKeeper(circles,carrier.Color);
         
