@@ -60,7 +60,13 @@ public partial class MainWindow : Window
 
         BitmapImage bitmap = new BitmapImage(new Uri(filePath));
         Bitmap image = Utils.ConvertBitmapImageToBitmap(bitmap);
-        
+
+
+        int centreY = (int)bitmap.Height/2;
+        Console.WriteLine("CentreY :" + centreY);
+
+        int lastDefenseurY = 0;
+
         List<Circle> circles = HandlerOffside.CircleDetect(image, 5, 50);
 
         Console.WriteLine("Nombre de cercle :" + circles.Count);
@@ -69,12 +75,13 @@ public partial class MainWindow : Window
         // Circle carrier = CircleAnalyzer.GetCarrier(circles);
         // Circle ball = CircleAnalyzer.Getball(circles);
         //Circle carrierDiff = CircleAnalyzer.GEtClosestCircleDiff(circles,ball, carrier);
-        //List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideTeam(circles,carrierDiff);
+        //List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideTeam(circles,carrierDiff,centreY);
         
-        List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(circles);
+        List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(ref lastDefenseurY,circles,centreY);
         
+        
+        HandlerOffside.DrawLine(image, lastDefenseurY);
         image = HandlerOffside.AnnotateImage(image, circles, AttackerOffside);
-        HandlerOffside.DrawLine(image, 50);
         ResultWindow resultWindow = new ResultWindow(bitmap,image);
         resultWindow.Show();
     }

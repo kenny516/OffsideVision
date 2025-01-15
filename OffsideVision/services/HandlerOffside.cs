@@ -9,7 +9,7 @@ public class HandlerOffside
     // static Color Team2Color = Color.FromArgb(86, 162, 232);
     // static Color ballColor = Color.FromArgb(18, 18, 18);
     static Color Team1Color = Color.Red;
-    static Color Team2Color = Color.FromArgb(25, 118, 210);
+    static Color Team2Color = Color.Blue;
     static Color ballColor = Color.Black;
 
     public static List<Circle> CircleDetect(Bitmap image, int minRadius, int maxRadius)
