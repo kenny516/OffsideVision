@@ -82,10 +82,13 @@ namespace OffsideVision.services
             {
                 foreach (var circle in circles)
                 {
+                    // Vérifier si le joueur est hors-jeu ou en règle
                     bool isOffside = offsidePlayers.Any(p => p.X == circle.X && p.Y == circle.Y && p.Radius == circle.Radius);
+                    
+                    // Définir la couleur de l'étiquette en fonction de l'état
                     Color labelColor = isOffside ? Color.Red : Color.LightBlue;
 
-                    // Dessiner le cercle
+                    // Dessiner le cercle avec un bord jaune
                     g.DrawEllipse(new Pen(Color.Yellow, 2),
                         circle.X - circle.Radius,
                         circle.Y - circle.Radius,
@@ -104,6 +107,26 @@ namespace OffsideVision.services
             }
 
             return annotatedImage;
+        }
+
+        public static void DrawLine(Bitmap image, int y)
+        {
+            // Vérification pour s'assurer que 'y' est dans les limites de l'image
+            if (y < 0 || y >= image.Height)
+            {
+                throw new ArgumentOutOfRangeException(nameof(y),
+                    "La valeur de y doit être comprise entre 0 et la hauteur de l'image.");
+            }
+
+            using (Graphics graphics = Graphics.FromImage(image))
+            {
+                // Définir une couleur et une épaisseur de pinceau
+                using (Pen pen = new Pen(Color.Red, 2)) // Ligne rouge avec une épaisseur de 2
+                {
+                    // Dessiner une ligne horizontale sur l'image
+                    graphics.DrawLine(pen, 0, y, image.Width - 1, y);
+                }
+            }
         }
     }
 }

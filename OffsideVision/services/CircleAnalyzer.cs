@@ -1,4 +1,5 @@
 ﻿using System.Windows.Documents;
+using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Win32;
 using OffsideVision.model;
 
@@ -189,7 +190,7 @@ public class CircleAnalyzer
     // Offside function 
     // sens = -1 for up
     // sens = 1 for down
-    public static List<Circle> GetOffsideCircles(List<Circle> circles)
+    public static List<Circle> GetOffsideCircles(ref int lineLastDefenseur,List<Circle> circles,int centreY)
     {
         var carrier = GetCarrier(circles);
         var goalKeeper = GetectGoalKeeper(circles,carrier.Color);
@@ -217,10 +218,20 @@ public class CircleAnalyzer
             Console.WriteLine("Attacker x "+attacker.X+" y:"+attacker.Y);
             if (oplastDefenseur.Y - oplastDefenseur.Radius > attacker.Y - attacker.Radius && sens > 0)
             {
+                lineLastDefenseur = oplastDefenseur.Y - oplastDefenseur.Radius;
+                if (attacker.Y -attacker.Radius > centreY)
+                {
+                    continue;
+                }
                 offsidePlayer.Add(attacker);
             }
             else if (oplastDefenseur.Y + oplastDefenseur.Radius < attacker.Y + attacker.Radius && sens < 0)
             {
+                lineLastDefenseur = oplastDefenseur.Y + oplastDefenseur.Radius;
+                if (attacker.Y +attacker.Radius < centreY)
+                {
+                    continue;
+                }
                 offsidePlayer.Add(attacker);
             }
         }
@@ -229,7 +240,7 @@ public class CircleAnalyzer
         return offsidePlayer;
     }
 
-    public static List<Circle> GetOffsideTeam(List<Circle> circles,Circle carrier,int CentreY)
+    public static List<Circle> GetOffsideTeam(List<Circle> circles,Circle carrier,int centreY)
     {
         var goalKeeper = GetectGoalKeeper(circles,carrier.Color);
         
@@ -253,12 +264,21 @@ public class CircleAnalyzer
         
         foreach (var attacker in attackerPossibleOffside)
         {
+            Console.WriteLine("Attacker x "+attacker.X+" y:"+attacker.Y);
             if (oplastDefenseur.Y - oplastDefenseur.Radius > attacker.Y - attacker.Radius && sens > 0)
             {
+                if (attacker.Y -attacker.Radius < centreY)
+                {
+                    continue;
+                }
                 offsidePlayer.Add(attacker);
             }
             else if (oplastDefenseur.Y + oplastDefenseur.Radius < attacker.Y + attacker.Radius && sens < 0)
             {
+                if (attacker.Y +attacker.Radius > centreY)
+                {
+                    continue;
+                }
                 offsidePlayer.Add(attacker);
             }
         }
