@@ -145,38 +145,25 @@ public class CircleAnalyzer
     public static Circle GetLastDefenseur(List<Circle> circles, Circle goalKeeper)
     {
         Circle circleClosestBall = null;
-        int distanceX = int.MaxValue;
-        int distanceY = int.MaxValue;
-        for (int i = 0; i < circles.Count; i++)
+        double minDistance = int.MaxValue;
+        foreach (var t in circles)
         {
-            if (circles[i] == goalKeeper || circles[i].Color != goalKeeper.Color)
+            if (t == goalKeeper || t.Color != goalKeeper.Color)
             {
                 continue;
             }
 
-            int newDistanceX = Math.Abs(goalKeeper.X - circles[i].X);
-            int newDistanceY = Math.Abs(goalKeeper.Y - circles[i].Y);
-            if (newDistanceX < distanceX && newDistanceY < distanceY)
+            double distance = Math.Sqrt(Math.Pow(t.X - goalKeeper.X, 2) +
+                                        Math.Pow(t.Y - goalKeeper.Y, 2));
+
+            if (distance < minDistance)
             {
-                distanceX = newDistanceX;
-                distanceY = newDistanceY;
-                circleClosestBall = circles[i];
-            }
-            else if (newDistanceX == distanceX && newDistanceY < distanceY)
-            {
-                distanceY = newDistanceY;
-                circleClosestBall = circles[i];
-            }
-            else if (newDistanceX < distanceX && newDistanceY == distanceY)
-            {
-                distanceX = newDistanceX;
-                circleClosestBall = circles[i];
+                minDistance = distance;
+                circleClosestBall = t;
             }
         }
-
         return circleClosestBall;
     }
-
     private static int GetSensAttaque(List<Circle> circles, Circle carrier)
     {
         var goalKeeper = GetectGoalKeeper(circles, carrier.Color);
