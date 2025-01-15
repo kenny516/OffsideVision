@@ -96,7 +96,7 @@ namespace OffsideVision.services
                         circle.Radius * 2);
 
                     // Ajouter l'étiquette "HJ" pour Hors-Jeu ou "ER" pour En-Règle
-                    string label = isOffside ? "HJ" : "ER";
+                    string label = isOffside ? "HJ" : "";
                     using (Brush brush = new SolidBrush(labelColor))
                     {
                         g.DrawString(label, new Font("Arial", 12, FontStyle.Bold), brush,
