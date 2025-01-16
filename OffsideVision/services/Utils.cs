@@ -1,8 +1,6 @@
 ﻿using System.Drawing;
 using System.IO;
-using System.Windows.Documents;
 using System.Windows.Media.Imaging;
-using OffsideVision.model;
 
 namespace OffsideVision.services;
 
@@ -11,16 +9,14 @@ public class Utils
     public static Bitmap ConvertBitmapImageToBitmap(BitmapImage bitmapImage)
     {
         // Créer un StreamMemory pour stocker les données de l'image
-        using (MemoryStream memoryStream = new MemoryStream())
-        {
-            // Enregistrez l'image dans le StreamMemory au format PNG
-            PngBitmapEncoder encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-            encoder.Save(memoryStream);
+        using var memoryStream = new MemoryStream();
+        // Enregistrez l'image dans le StreamMemory au format PNG
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+        encoder.Save(memoryStream);
 
-            // Retourner le Bitmap à partir du StreamMemory
-            return new Bitmap(memoryStream);
-        }
+        // Retourner le Bitmap à partir du StreamMemory
+        return new Bitmap(memoryStream);
     }
 
     public static bool IsCloseColor(Color color1, Color color2, int tolerance = 70)
@@ -43,15 +39,15 @@ public class Utils
         return colorName switch
         {
             // Rouge : De rouge clair à foncé avec différentes saturations et luminosité
-            "Red" => (saturation > 0.3 && brightness > 0.1 && 
-                      ((hue >= 0 && hue <= 15) || (hue >= 15 && hue <= 30) || (hue >= 330 && hue <= 360))), // Couvrir du rouge clair au rouge foncé
+            "Red" => saturation > 0.3 && brightness > 0.1 && 
+                     hue is >= 0 and <= 15 or >= 15 and <= 30 or >= 330 and <= 360, // Couvrir du rouge clair au rouge foncé
 
             // Bleu : De bleu clair à foncé
-            "Blue" => (saturation > 0.3 && brightness > 0.2 && 
-                       ((hue >= 190 && hue <= 220) || (hue >= 220 && hue <= 260))), // Couvrir du bleu clair au bleu foncé
+            "Blue" => saturation > 0.3 && brightness > 0.2 && 
+                      hue is >= 190 and <= 220 or >= 220 and <= 260, // Couvrir du bleu clair au bleu foncé
 
             // Noir : Large plage de gris foncés et noir
-            "Black" => (brightness < 0.4 && saturation < 0.3), // Inclure les gris foncés jusqu'au noir pur
+            "Black" => brightness < 0.4 && saturation < 0.3, // Inclure les gris foncés jusqu'au noir pur
 
             // Couleur inconnue ou non gérée
             _ => false
@@ -77,11 +73,4 @@ public class Utils
         // Couleur inconnue
         return "Unknown";
     }
-
-
-
-
-
-
-
 }
