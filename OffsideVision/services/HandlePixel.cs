@@ -39,10 +39,7 @@ public class HandlePixel
                     currentPixel.Color = Utils.IsCloseColor(pixelColor, Team1Color) ? "Red" :
                         Utils.IsCloseColor(pixelColor, Team2Color) ? "Blue" : "Black";
 
-                    if (currentPixel != null)
-                    {
-                        circles.Add(currentPixel);
-                    }
+                    circles.Add(currentPixel);
                 }
             }
         }
