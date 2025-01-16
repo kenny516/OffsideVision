@@ -12,6 +12,8 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using OffsideVision.model;
 using OffsideVision.services;
+using Color = System.Drawing.Color;
+using Point = OpenCvSharp.Point;
 
 namespace OffsideVision;
 
@@ -72,16 +74,22 @@ public partial class MainWindow : Window
         Console.WriteLine("Nombre de cercle :" + circles.Count);
 
 
-        // Circle carrier = CircleAnalyzer.GetCarrier(circles);
+        Circle carrier = CircleAnalyzer.GetCarrier(circles);
         // Circle ball = CircleAnalyzer.Getball(circles);
         //Circle carrierDiff = CircleAnalyzer.GEtClosestCircleDiff(circles,ball, carrier);
         //List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideTeam(circles,carrierDiff,centreY);
         
-        List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(ref lastDefenseurY,circles,centreY);
+        List<Circle> ggCircle = new List<Circle>();
         
+        List<Circle> AttackerOffside = CircleAnalyzer.GetOffsideCircles(ggCircle,ref lastDefenseurY,circles,centreY);
         
-        HandlerOffside.DrawLine(image, lastDefenseurY);
-        image = HandlerOffside.AnnotateImage(image, circles, AttackerOffside);
+
+         for (int i = 0; i < ggCircle.Count; i++)
+         {
+             HandlerOffside.DrawArrow(image,new Point((double)carrier.X,(double)carrier.Y),new Point((double)ggCircle.X,(double)ggCircle.Y),Color.Aqua);
+         }
+         HandlerOffside.DrawLine(image, lastDefenseurY);
+         image = HandlerOffside.AnnotateImage(image, circles, AttackerOffside);
         ResultWindow resultWindow = new ResultWindow(bitmap,image);
         resultWindow.Show();
     }

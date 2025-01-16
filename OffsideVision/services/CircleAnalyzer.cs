@@ -18,7 +18,7 @@ public class CircleAnalyzer
 
         foreach (var circle in circles)
         {
-            if (circle == circleRef && circle.Color == "Black")
+            if (circle == circleRef || circle.Color == "Black")
                 continue;
 
             // Calcul de la distance euclidienne entre les centres des cercles
@@ -74,7 +74,7 @@ public class CircleAnalyzer
         Circle circleGoalKeeper = null;
         for (int i = 0; i < circles.Count; i++)
         {
-            if (minY > circles[i].Y)
+            if (minY > circles[i].Y && circles[i].Color!= "Black")
             {
                 minY = circles[i].Y;
                 circleGoalKeeper = circles[i];
@@ -87,7 +87,7 @@ public class CircleAnalyzer
             circleGoalKeeper = null;
             for (int i = 0; i < circles.Count; i++)
             {
-                if (maxY < circles[i].Y)
+                if (maxY < circles[i].Y && circles[i].Color!= "Black")
                 {
                     maxY = circles[i].Y;
                     circleGoalKeeper = circles[i];
@@ -179,7 +179,7 @@ public class CircleAnalyzer
     // Offside function 
     // sens = -1 for up
     // sens = 1 for down
-    public static List<Circle> GetOffsideCircles(ref int lineLastDefenseur,List<Circle> circles,int centreY)
+    public static List<Circle> GetOffsideCircles(List<Circle> ggCircle,ref int lineLastDefenseur,List<Circle> circles,int centreY)
     {
         var carrier = GetCarrier(circles);
         var goalKeeper = GetectGoalKeeper(circles,carrier.Color);
@@ -197,8 +197,9 @@ public class CircleAnalyzer
         
         Console.WriteLine("sense : " + sens);
         Console.WriteLine("carrier : " + carrier.Color);
+        
         Console.WriteLine("Attacker count : " + attackerPossibleOffside.Count);
-        Console.WriteLine("goalKeeper : " + opGoalKeeper.Color);
+        Console.WriteLine("goalKeeper : " + goalKeeper.Color);
 
         Console.WriteLine("last defenseur x "+oplastDefenseur.X+" y:"+oplastDefenseur.Y+" color"+oplastDefenseur.Color);
         
@@ -210,6 +211,7 @@ public class CircleAnalyzer
                 lineLastDefenseur = oplastDefenseur.Y - oplastDefenseur.Radius;
                 if (attacker.Y -attacker.Radius > centreY)
                 {
+                    ggCircle.Add(attacker);
                     continue;
                 }
                 offsidePlayer.Add(attacker);
@@ -219,13 +221,13 @@ public class CircleAnalyzer
                 lineLastDefenseur = oplastDefenseur.Y + oplastDefenseur.Radius;
                 if (attacker.Y +attacker.Radius < centreY)
                 {
+                    ggCircle.Add(attacker);
                     continue;
                 }
                 offsidePlayer.Add(attacker);
             }
         }
         Console.WriteLine("offside count : " + offsidePlayer.Count);
-
         return offsidePlayer;
     }
 

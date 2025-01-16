@@ -36,7 +36,7 @@ namespace OffsideVision.services
                 float radius;
                 Cv2.MinEnclosingCircle(contour, out center, out radius);
 
-                if (radius > 5) // Ignorer les petits bruits
+                if (radius > 2) // Ignorer les petits bruits
                 {
                     Cercles.Add(new Circle((int)center.X, (int)center.Y, (int)radius, color.Name));
                 }
@@ -68,7 +68,7 @@ namespace OffsideVision.services
             List<Circle> Cercles = new List<Circle>();
             Cercles.AddRange(blueCercles);
             Cercles.AddRange(redCercles);
-            Cercles.AddRange(blackCercles);
+            Cercles.Add(blackCercles[0]);
 
             return Cercles;
         }
@@ -128,5 +128,39 @@ namespace OffsideVision.services
                 }
             }
         }
+        
+        public static void DrawArrow(Bitmap image, Point startPoint, Point endPoint, Color color, int thickness = 2, float tipLength = 0.2f)
+        {
+            // Utiliser Graphics pour dessiner sur le Bitmap
+            using (Graphics g = Graphics.FromImage(image))
+            {
+                // Activer les options pour une meilleure qualité de dessin
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // Créer un stylo avec la couleur et l'épaisseur spécifiées
+                using (Pen pen = new Pen(color, thickness))
+                {
+                    // Calculer la direction du segment de la flèche
+                    double angle = Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X);
+
+                    // Déterminer la longueur de la pointe de la flèche
+                    double arrowLength = Math.Sqrt(Math.Pow(endPoint.X - startPoint.X, 2) + Math.Pow(endPoint.Y - startPoint.Y, 2));
+                    double headLength = tipLength * arrowLength;
+
+                    // Calculer les deux points de la pointe de la flèche
+                    PointF arrowPoint1 = new PointF(
+                        (float)(endPoint.X - headLength * Math.Cos(angle - Math.PI / 6)),
+                        (float)(endPoint.Y - headLength * Math.Sin(angle - Math.PI / 6))
+                    );
+                    PointF arrowPoint2 = new PointF(
+                        (float)(endPoint.X - headLength * Math.Cos(angle + Math.PI / 6)),
+                        (float)(endPoint.Y - headLength * Math.Sin(angle + Math.PI / 6))
+                    );
+
+
+                }
+            }
+        }
+
     }
 }
