@@ -18,7 +18,7 @@ public class CircleAnalyzer
 
         foreach (var circle in circles)
         {
-            if (circle == circleRef)
+            if (circle == circleRef && circle.Color == "Black")
                 continue;
 
             // Calcul de la distance euclidienne entre les centres des cercles
